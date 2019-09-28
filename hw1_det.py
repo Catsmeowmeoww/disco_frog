@@ -19,3 +19,4 @@ def determinant(list_of_list):
 
     return det
     raise NotImplementedError
+
