@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 # coding: utf-8
 
 
@@ -6,6 +6,7 @@ class VKPoster:
 
     def __init__(self):
         self.users = {}
+        self.posts = {}
         # raise NotImplementedError
 
     def user_posted_post(self, user_id: int, post_id: int):
@@ -24,33 +25,30 @@ class VKPoster:
         pass
 
     def get_recent_posts(self, user_id: int, k: int) -> list:
-        '''
-        Метод который вызывается когда пользователь user_id
-        запрашивает k свежих постов людей на которых он подписан.
-        :param user_id: id пользователя. Число.
-        :param k: Сколько самых свежих постов необходимо вывести. Число.
-        :return: Список из post_id размером К из свежих постов в
-        ленте пользователя. list
-        '''
         self.user_sign(user_id)
-        newest_posts = []
-        new = 0
-        for i in range(k):
-            self.i = lambda n: self.users[user_id] if self.users[user_id] not in newest_posts
+        newest_posts = [0]
         for i in self.users[user_id]['follows']:
-            self.users[i]['posts'].sort()
-            newest_posts += self.users[i]['posts'][:k]
+            for j in self.users[i]['posts']:
+                for jj in range(len(newest_posts)):
+                    if j > newest_posts[jj]:
+                        newest_posts.insert(jj, j)
+                        newest_posts = newest_posts[:k]
+                        break
         return newest_posts
         pass
 
     def get_most_popular_posts(self, k: int) -> list:
-        '''
-        Метод который возвращает список k самых популярных постов за все время,
-        остортированных по свежести.
-        :param k: Сколько самых свежих популярных постов
-        необходимо вывести. Число.
-        :return: Список из post_id размером К из популярных постов. list
-        '''
+        post_lst = [0]
+        for i in self.users:
+            for j in self.users[i]['views']:
+                self.post_pop(j)
+        for i in self.posts:
+            for j in range(len(post_lst)):
+                if self.posts[i] > post_lst[j]:
+                    post_lst.insert(j, i)
+                    post_lst = post_lst[:k]
+        post_lst.sort(reverse=True)
+        return post_lst
         pass
 
     def user_sign(self, user_id):
@@ -58,13 +56,29 @@ class VKPoster:
             self.users[user_id] = {'posts': [], 'views': [], 'follows': []}
         return None
 
+    def post_pop(self,post_id):
+        if self.posts.get(post_id) is None:
+            self.posts[post_id] = 1
+        else:
+            self.posts[post_id] += 1
+        return None
 
-a = VKPoster()
-a.user_posted_post(111, 333)
-a.user_posted_post(444, 123)
-a.user_posted_post(444, 124)
-a.user_posted_post(444, 125)
-a.user_follow_for(111, 444)
-a.user_read_post(111, 555)
-print(a.get_recent_posts(111,2))
-print(a.users)
+
+# a = VKPoster()
+# a.user_posted_post(111, 333)
+# a.user_posted_post(444, 124)
+# a.user_posted_post(444, 123)
+# a.user_posted_post(444, 125)
+# a.user_follow_for(111, 444)
+# a.user_read_post(112, 555)
+# a.user_read_post(113, 123)
+# a.user_read_post(111, 444)
+# a.user_read_post(112, 445)
+# a.user_read_post(111, 1)
+# a.user_read_post(111, 2)
+# a.user_read_post(113, 3)
+# a.user_read_post(111, 4)
+# a.user_read_post(115, 555)
+# print(a.get_most_popular_posts(2))
+# print(a.get_recent_posts(111, 3))
+# print(a.users)
