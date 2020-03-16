@@ -12,3 +12,4 @@ def find_subarr(input_lst, num):
     return ()
     raise NotImplementedError
 
+
