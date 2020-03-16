@@ -14,3 +14,5 @@ def word_inversion(input_lst):
     input_lst.insert(-k, a)
     return None
     raise NotImplementedError
+
+
